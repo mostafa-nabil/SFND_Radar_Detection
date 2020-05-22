@@ -69,14 +69,18 @@ for i=1:length(t)
     % *%TODO* :
     %For each time sample we need update the transmitted and
     %received signal. 
-    Tx(i) = 
-    Rx (i)  =
+    
+    dist = V_target*t(0);
+    Tau = 2*dist*c; 
+    
+    Tx(i) = cos(2*pi*(fc*t(i) + (0.5*slope*t(i)^2)));
+    Rx(i)  = cos(2*pi*(fc*(t-Tau) + (0.5*slope*(t-Tau)^2)));
     
     % *%TODO* :
     %Now by mixing the Transmit and Receive generate the beat signal
     %This is done by element wise matrix multiplication of Transmit and
     %Receiver Signal
-    Mix(i) = 
+    Mix(i) = Tx(i).*Rx(i);
     
 end
 
