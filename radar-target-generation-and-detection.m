@@ -207,7 +207,7 @@ for i = 1:size(RDM)(1)-(T_col*2 + G_col*2 + 1)
     if(RDM(i+T_col+G_col+1,j+T_row+G_row+1)<thresh)
       RDM_2(i+T_col+G_col+1,j+T_row+G_row+1) = 0;
      else
-      RDM_2(i+T_col+G_col+1,j+T_row+G_row+1) = RDM(i+T_col+G_col+1,j+T_row+G_row+1);
+      RDM_2(i+T_col+G_col+1,j+T_row+G_row+1) = 1;
     endif
   end
   
