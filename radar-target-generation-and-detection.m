@@ -159,16 +159,16 @@ figure,surf(doppler_axis,range_axis,RDM);
 
 % *%TODO* :
 %Select the number of Training Cells in both the dimensions.
-T_col = 10;
+T_col = 5;
 T_row = 10;
 % *%TODO* :
 %Select the number of Guard Cells in both dimensions around the Cell under 
 %test (CUT) for accurate estimation
-G_col = 3;
-G_row = 3;
+G_col = 2;
+G_row = 2;
 % *%TODO* :
 % offset the threshold by SNR value in dB
-offset = 3;
+offset = 15;
 % *%TODO* :
 %Create a vector to store noise_level for each iteration on training cells
 noise_level = zeros(1,1);
@@ -188,26 +188,26 @@ noise_level = zeros(1,1);
 
    % Use RDM[x,y] as the matrix from the output of 2D FFT for implementing
    % CFAR
-num_train = (T_row*2 + G_row*2 + 1)*(T_col*2 + G_col*2 + 1)-((G_row+1)*(G_col+1));
-RDM_pow= zeros(size(RDM));
-for i = 1:size(RDM)(1)
-  for j = 1:size(RDM)(2)
-    RDM_pow(i,j) = db2pow(RDM(i,j))
-  end
-end
-
-for i = 1:size(RDM)(1)-(T_row*2 + G_row*2 + 1)
+num_train = (T_row*2 + G_row*2 + 1)*(T_col*2 + G_col*2 + 1)-(((2*G_row)+1)*((2*G_col)+1));
+RDM_2 = zeros(size(RDM));
+for i = 1:size(RDM)(1)-(T_col*2 + G_col*2 + 1)
   
-  for j = 1:size(RDM)(2)-(T_col*2 + G_col*2 + 1)
+  for j = 1:size(RDM)(2)-(T_row*2 + G_row*2 + 1)
     sum_T = 0;
-    sum_T = sum_T+ sum(RDM_pow(i:i+T_col,j:j+2*T_row+2*G_row+1)(:));
-    sum_T = sum_T + sum(RDM_pow(i+T_col+1+2*G_col:i+2*T_col+1+2*G_col,j:j+2*T_row+2*G_row+1)(:));
-    sum_T = sum_T + sum(RDM_pow(i+T_col:i+T_col+1+2*G_col,j:j+T_row)(:));
-    sum_T = sum_T + sum(RDM_pow(i+T_col:i+T_col+1+2*G_col,j+T_row+2*G_row+1:j+2*T_row+2*G_row+1)(:));
-
+    for row = i:(i+(T_col*2)+(2*G_col)+1)
+      for col = (j:j+(T_row*2)+(2*G_row)+1)
+        if((row < i+T_col || row>i+T_col+2*G_col+1) && (col < j+T_row || col>j+T_row+2*G_row+1) )
+          sum_T = sum_T + db2pow(RDM(row,col));
+        endif
+      end
+    end
     avg = sum_T/num_train;
-    if(RDM(i,j)<pow2db(avg)+offset)
-      RDM(i,j) = 0;
+    avg = pow2db(avg);
+    thresh = avg + offset;
+    if(RDM(i+T_col+G_col+1,j+T_row+G_row+1)<thresh)
+      RDM_2(i+T_col+G_col+1,j+T_row+G_row+1) = 0;
+     else
+      RDM_2(i+T_col+G_col+1,j+T_row+G_row+1) = RDM(i+T_col+G_col+1,j+T_row+G_row+1);
     endif
   end
   
@@ -220,19 +220,13 @@ end
 %than the Range Doppler Map as the CUT cannot be located at the edges of
 %matrix. Hence,few cells will not be thresholded. To keep the map size same
 % set those values to 0. 
- 
 
-
-
-
-
-
-
+%STUDENT: the result is already in a new array
 
 % *%TODO* :
 %display the CFAR output using the Surf function like we did for Range
 %Doppler Response output.
-figure,surf(doppler_axis,range_axis,RDM);
+figure,surf(doppler_axis,range_axis,RDM_2);
 colorbar;
 
 
