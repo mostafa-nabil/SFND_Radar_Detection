@@ -160,7 +160,7 @@ figure,surf(doppler_axis,range_axis,RDM);
 % *%TODO* :
 %Select the number of Training Cells in both the dimensions.
 T_col = 5;
-T_row = 10;
+T_row = 5;
 % *%TODO* :
 %Select the number of Guard Cells in both dimensions around the Cell under 
 %test (CUT) for accurate estimation
@@ -168,7 +168,7 @@ G_col = 2;
 G_row = 2;
 % *%TODO* :
 % offset the threshold by SNR value in dB
-offset = 15;
+offset = 10;
 % *%TODO* :
 %Create a vector to store noise_level for each iteration on training cells
 noise_level = zeros(1,1);
