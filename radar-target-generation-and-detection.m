@@ -1,13 +1,13 @@
 clear all
 clc;
 
-function y = db2pow(ydb)
+function y = db2pow_loc(ydb)
   y = 10.^(ydb/10);
-endfunction
+end
 
-function ydb = pow2db(y)
+function ydb = pow2db_loc(y)
   ydb = 10*log10(y);
-endfunction
+end
 
 %% Radar Specifications 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -197,18 +197,18 @@ for i = 1:size(RDM)(1)-(T_col*2 + G_col*2 + 1)
     for row = i:(i+(T_col*2)+(2*G_col)+1)
       for col = (j:j+(T_row*2)+(2*G_row)+1)
         if((row < i+T_col || row>i+T_col+2*G_col+1) && (col < j+T_row || col>j+T_row+2*G_row+1) )
-          sum_T = sum_T + db2pow(RDM(row,col));
-        endif
+          sum_T = sum_T + db2pow_loc(RDM(row,col));
+        end
       end
     end
     avg = sum_T/num_train;
-    avg = pow2db(avg);
+    avg = pow2db_loc(avg);
     thresh = avg + offset;
     if(RDM(i+T_col+G_col+1,j+T_row+G_row+1)<thresh)
       RDM_2(i+T_col+G_col+1,j+T_row+G_row+1) = 0;
      else
       RDM_2(i+T_col+G_col+1,j+T_row+G_row+1) = 1;
-    endif
+    end
   end
   
 end
