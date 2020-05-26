@@ -190,9 +190,9 @@ noise_level = zeros(1,1);
    % CFAR
 num_train = (T_row*2 + G_row*2 + 1)*(T_col*2 + G_col*2 + 1)-(((2*G_row)+1)*((2*G_col)+1));
 RDM_2 = zeros(size(RDM));
-for i = 1:size(RDM)(1)-(T_col*2 + G_col*2 + 1)
+for i = 1:size(RDM,1)-(T_col*2 + G_col*2 + 1)
   
-  for j = 1:size(RDM)(2)-(T_row*2 + G_row*2 + 1)
+  for j = 1:size(RDM,2)-(T_row*2 + G_row*2 + 1)
     sum_T = 0;
     for row = i:(i+(T_col*2)+(2*G_col)+1)
       for col = (j:j+(T_row*2)+(2*G_row)+1)
